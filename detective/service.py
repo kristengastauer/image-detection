@@ -60,10 +60,8 @@ def get_all_images_by_object(object_name):
         return
     images = []
     image_ids = [row[2] for row in data]
-    print(image_ids, "%%%%%%%%%%%%%%%%%%%")
     for id in image_ids:
         img_meta = get_image_by_id(id)
-        print(img_meta, "@#$%^&@#$%^&*@#$%^&")
         images.append(img_meta)
 
     return images

@@ -18,7 +18,6 @@ class UserImage:
 
     def to_dict(self):
         objs = self.get_all_detected_objects()
-        print(objs, "$$$$$$$$$$$$$$$$$$$$$$$$$$")
         return {
             "id": self.id,
             "label": self.label,
@@ -28,7 +27,6 @@ class UserImage:
     
     def get_all_detected_objects(self):
         c = sqlite3.connect("user_images.db").cursor()
-        print(self.id, "****************************")
         c.execute("SELECT * FROM IMAGEOBJECTS WHERE image_id=?", (self.id,))
         data = c.fetchall()
         
@@ -36,7 +34,6 @@ class UserImage:
             return
         detected_objs = []
         for row in data:
-            print(row, '%%%%%%%%%%%%%%%%%%%%%%')
             detected_objs.append(row[1])
 
         return detected_objs

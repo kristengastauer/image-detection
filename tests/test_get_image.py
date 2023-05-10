@@ -76,7 +76,6 @@ def test_get_image_by_object(client):
     response = client.get('/images?objects=dog')
     assert response.status_code == 200
     data = response.json["images"][0]
-    print(data, "^^^^^^^^^^^^^^^")
     assert data["label"] == "cutepuppies"
     assert data['objects'][0] == 'dog'
 

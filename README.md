@@ -13,7 +13,7 @@ Response | Description
 
 Sample response
 ```
-{"images": [{"id": 12345678654323456, "label": "superreal", "enable_detection": 1}]}
+{"images": [{"id": 12345678654323456, "label": "superreal", "enable_detection": 1, "objects": ["dog"]}]}
 ```
 
 ```
@@ -30,7 +30,7 @@ objects   | comma-separated list of objects to detect
 
 Sample response
 ```
-{"images": [{"id": 12345678654323456, "label": "superreal", "enable_detection": 1}]}
+{"images": [{"id": 12345678654323456, "label": "superreal", "enable_detection": 1, "objects": ["dog"]}]}
 ```
 
 ```
@@ -47,7 +47,7 @@ image_id  | path parameter ID of specified image
 
 Sample response
 ```
-{"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 1}}
+{"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 1, "objects": ["dog"]}}
 ```
 
 ```
@@ -67,7 +67,8 @@ image_type           | (optional - defaults type is "file") should be either "fi
 
 Sample response
 ```
-{"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 1}}
+{"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 1, "objects": ["dog"]}}
+{"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 0, "objects": None}}
 ```
 
 # Extra API Endpoints For UI
