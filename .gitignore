@@ -1,0 +1,10 @@
+# created by virtualenv automatically
+bin
+pyvenv.cfg
+share/
+lib/
+image_objects.db
+detective/__pycache__
+detective/model/__pycache__
+detective/api/__pycache__
+tests/__pycache__
