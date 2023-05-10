@@ -1,8 +1,6 @@
 import sqlite3
 import json
 import requests
-from io import BytesIO
-from PIL import Image
 from flask import jsonify
 from detective.model import UserImage, ImageObjects
 from detective.lib import imagga
@@ -37,9 +35,10 @@ def add_image(label, image, enable_detection, typ="file"):
 
     # add image to db
     img = _add_image_to_db(label, binary_img, enable_detection)
-
+    print(img["enable_detection"], "^^^^^^^^^^^^^^^^^^^")
     # call to see objects detected
     if img["enable_detection"]:
+        print("somehow i am here")
         if typ == "url":
             objects = imagga.get_tags_for_image_url(img_url=image)
         else:
@@ -69,7 +68,8 @@ def get_all_images_by_object(object_name):
 def _add_image_to_db(label, image, enable_detection):
     db = sqlite3.connect("user_images.db")
     c = db.cursor()
-    img = UserImage(image=image,
+    img = UserImage(id=None,
+                    image=image,
                     label=label,
                     enable_detection=enable_detection
                     )

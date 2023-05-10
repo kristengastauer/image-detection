@@ -4,7 +4,9 @@ pyvenv.cfg
 share/
 lib/
 image_objects.db
+user_images.db
 detective/__pycache__
 detective/model/__pycache__
 detective/api/__pycache__
 tests/__pycache__
+config.py

@@ -6,8 +6,6 @@ from flask import *
 from detective import setup_app
 from unittest.mock import patch
 from tests import get_imagga_tag_response, get_imagga_upload_response
-from PIL import Image
-from io import BytesIO
 
 # Define test database name
 IMAGES_DB = 'user_images.db'

@@ -41,9 +41,9 @@ def create(config):
         label = request.form.get("label")
         image = request.form.get("image")
         typ = request.form.get("image_type")
-        enable_detection = request.form.get("enable_detection")
+        enable_detection = _parse_boolean_value(request.form.get("enable_detection"))
 
-        image = image_service.add_image(label, image, enable_detection, typ=typ)
+        image = image_service.add_image(label=label, image=image, enable_detection=enable_detection, typ=typ)
         return {"image": image}
 
     def _not_found(message):
@@ -51,4 +51,13 @@ def create(config):
         response.status_code = 404
         return response
 
+    def _parse_boolean_value(value):
+        # we have to do this for -F form inputs for curl
+        if isinstance(value, bool):
+            return value
+        elif isinstance(value, str):
+            return value.lower() in ('true', 'yes', '1')
+        else:
+            return False
+        
     return app

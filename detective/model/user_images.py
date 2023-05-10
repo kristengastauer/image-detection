@@ -6,7 +6,8 @@ LABEL_LENGTH = 10
 
 class UserImage:
 
-    def __init__(self, id=None, image=None, label=None, enable_detection=True):
+    def __init__(self, id=None, image=None, label=None, enable_detection=False):
+        print("id:", id, "label:", label, "enable_detection:", enable_detection)
         self.id = id
         if not id:
             self.id = uuid.uuid4().hex
@@ -14,7 +15,7 @@ class UserImage:
             label = str(self.id)
         self.label = label  # string
         self.image = image  # blob
-        self.enable_detection = enable_detection  # bool
+        self.enable_detection = bool(enable_detection)  # bool
 
     def to_dict(self):
         objs = self.get_all_detected_objects()
