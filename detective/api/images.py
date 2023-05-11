@@ -11,11 +11,11 @@ def create(config):
         objects = request.args.get("objects")
         # no query of objects, return them all
         if not objects:
-            return {"images": json.loads(image_service.get_all_images())}
+            return jsonify({"images": image_service.get_all_images()})
 
         # otherwise, call to get all images with object detection enabled that have object
         images = []
-        objects = objects if isinstance(objects, list) else [objects]
+        objects = [obj.strip() for obj in objects.split(',')]
         for obj in objects:
             matches = image_service.get_all_images_by_object(obj)
             if matches:
@@ -23,9 +23,9 @@ def create(config):
                     images.append(row)
 
         if len(images) == 0:
-            return _not_found("Image not found")
+            return _not_found(f"Image with object(s) not found")
 
-        return {"images": images}
+        return jsonify({"images": images})
         
 
     @app.route('/images/<image_id>', methods=['GET'])
@@ -34,7 +34,7 @@ def create(config):
         if not image:
             return _not_found("Image not found")
 
-        return {"image": image}
+        return jsonify({"image": image})
 
     @app.route('/images', methods=['POST'])
     def add_image():
@@ -44,7 +44,7 @@ def create(config):
         enable_detection = _parse_boolean_value(request.form.get("enable_detection"))
 
         image = image_service.add_image(label=label, image=image, enable_detection=enable_detection, typ=typ)
-        return {"image": image}
+        return jsonify({"image": image})
 
     def _not_found(message):
         response = jsonify({'error': message})

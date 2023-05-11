@@ -9,7 +9,7 @@ def setup_app(app, config):
               "id TEXT PRIMARY KEY, image BLOB, label TEXT, enable_detection BOOL)"
               )
     imgs.execute("CREATE TABLE IF NOT EXISTS IMAGEOBJECTS("
-              "id TEXT, object_name TEXT, image_id TEXT)"
+              "id TEXT, image_id TEXT, object_name TEXT)"
               )
     imgs.connection.close()
     app.register_blueprint(images.create(config))

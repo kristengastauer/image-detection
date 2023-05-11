@@ -9,4 +9,4 @@ detective/__pycache__
 detective/model/__pycache__
 detective/api/__pycache__
 tests/__pycache__
-config.py
+detective/config.py

@@ -13,19 +13,11 @@ def get_all_images():
         item = UserImage(*row)
         images.append(item.to_dict())
     c.close()
-    return json.dumps(images)
+
+    return images
 
 def get_image_by_id(id):
-    c = sqlite3.connect("user_images.db").cursor()
-    c.row_factory = sqlite3.Row
-    rows = c.execute("SELECT id, image, label, enable_detection FROM IMAGES WHERE id=?", (id,))
-    formatted = []
-    for row in rows:
-        item = UserImage(*row)
-        formatted.append(item.to_dict())
-    if len(formatted) == 0:
-        return
-    return formatted[0]
+    return UserImage.get_by_id(id)
 
 def add_image(label, image, enable_detection, typ="file"):
     # convert image to binary
@@ -34,11 +26,14 @@ def add_image(label, image, enable_detection, typ="file"):
         binary_img = _convert_url_to_binary(image)
 
     # add image to db
-    img = _add_image_to_db(label, binary_img, enable_detection)
-    print(img["enable_detection"], "^^^^^^^^^^^^^^^^^^^")
+    img = UserImage(id=None,
+                    image=image,
+                    label=label,
+                    enable_detection=enable_detection
+                    )
+    img.add_to_db()
     # call to see objects detected
-    if img["enable_detection"]:
-        print("somehow i am here")
+    if img.enable_detection:
         if typ == "url":
             objects = imagga.get_tags_for_image_url(img_url=image)
         else:
@@ -47,47 +42,21 @@ def add_image(label, image, enable_detection, typ="file"):
 
         # add objs to db
         for obj in objects:
-            _add_object_to_db(img["id"], obj)
+            img_obj = ImageObjects(id=None, image_id=img.id, object_name=obj)
+            img_obj.add_to_db()
 
-    return img
+    return img.to_dict()
 
 def get_all_images_by_object(object_name):
-    c = sqlite3.connect("user_images.db").cursor()
-    c.execute("SELECT * FROM IMAGEOBJECTS WHERE object_name=?", (object_name,))
-    data = c.fetchall()
-    if len(data) == 0:
+    image_ids = ImageObjects.get_all_image_ids_by_object(object_name)
+    if len(image_ids) == 0:
         return
     images = []
-    image_ids = [row[2] for row in data]
     for id in image_ids:
         img_meta = get_image_by_id(id)
         images.append(img_meta)
 
     return images
-
-def _add_image_to_db(label, image, enable_detection):
-    db = sqlite3.connect("user_images.db")
-    c = db.cursor()
-    img = UserImage(id=None,
-                    image=image,
-                    label=label,
-                    enable_detection=enable_detection
-                    )
-
-    c.execute("INSERT INTO IMAGES VALUES(?,?,?,?)",
-              (img.id, img.label, img.image, img.enable_detection))
-    db.commit()
-    return img.to_dict()
-
-def _add_object_to_db(image_id, object_name):
-    db = sqlite3.connect("user_images.db")
-    c = db.cursor()
-    img_obj = ImageObjects(image_id, object_name)
-
-    c.execute("INSERT INTO IMAGEOBJECTS (id, image_id, object_name) VALUES (?, ?, ?)",
-                (img_obj.id, image_id, object_name))
-    db.commit()
-    return img_obj
 
 def _convert_url_to_binary(file_url):
     r = requests.get(file_url)

@@ -119,6 +119,6 @@ To test the API directly, in a second terminal window you can now hit:
 ```
 curl -X GET http://localhost:8080/images
 
-curl -X POST http://localhost:8080/images -F "image=<url>" -F "type=url" -F "label=fluffy_dog" -F "enable_detection=False"
+curl -X POST http://localhost:8080/images -F "image=<url>" -F "image_type=url" -F "label=fluffy_dog" -F "enable_detection=False"
 ```
 

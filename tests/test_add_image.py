@@ -27,7 +27,7 @@ def setup_module(module):
     db = sqlite3.connect(IMAGES_DB)
     c = db.cursor()
     c.execute("CREATE TABLE IF NOT EXISTS IMAGES(id TEXT PRIMARY KEY, image BLOB, label TEXT, enable_detection BOOL)")
-    c.execute("CREATE TABLE IF NOT EXISTS IMAGEOBJECTS(id TEXT, object_name TEXT, image_id TEXT)")
+    c.execute("CREATE TABLE IF NOT EXISTS IMAGEOBJECTS(id TEXT, image_id TEXT, object_name TEXT)")
     db.commit()
     db.close()
 

@@ -27,7 +27,7 @@ def setup_module(module):
     c.execute("INSERT OR IGNORE INTO IMAGES (id, image, enable_detection) VALUES (2, NULL, False)")
     c.execute("INSERT OR IGNORE INTO IMAGES (id, image, label, enable_detection) VALUES (3, 0110, 'smallkittens', True)")
     c.execute("CREATE TABLE IF NOT EXISTS IMAGEOBJECTS(id TEXT, object_name TEXT, image_id TEXT)")
-    c.execute("INSERT OR IGNORE INTO IMAGEOBJECTS (id, object_name, image_id) VALUES (5678, 'dog', 1)")
+    c.execute("INSERT OR IGNORE INTO IMAGEOBJECTS (id, image_id, object_name) VALUES (5678, 1, 'dog')")
     db.commit()
     db.close()
 
@@ -82,4 +82,4 @@ def test_get_image_by_object(client):
     # Test an object that hasn't been detected
     response = client.get('/images?objects=pickles')
     assert response.status_code == 404
-    assert response.json == {'error': 'Image not found'}
+    assert response.json == {'error': 'Image with object(s) not found'}
