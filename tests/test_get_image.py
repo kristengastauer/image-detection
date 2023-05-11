@@ -26,7 +26,7 @@ def setup_module(module):
     c.execute("INSERT OR IGNORE INTO IMAGES (id, image, label, enable_detection) VALUES (1, 1001, 'cutepuppies', True)")
     c.execute("INSERT OR IGNORE INTO IMAGES (id, image, enable_detection) VALUES (2, NULL, False)")
     c.execute("INSERT OR IGNORE INTO IMAGES (id, image, label, enable_detection) VALUES (3, 0110, 'smallkittens', True)")
-    c.execute("CREATE TABLE IF NOT EXISTS IMAGEOBJECTS(id TEXT, object_name TEXT, image_id TEXT)")
+    c.execute("CREATE TABLE IF NOT EXISTS IMAGEOBJECTS(id TEXT, image_id TEXT, object_name TEXT)")
     c.execute("INSERT OR IGNORE INTO IMAGEOBJECTS (id, image_id, object_name) VALUES (5678, 1, 'dog')")
     db.commit()
     db.close()
@@ -61,7 +61,7 @@ def test_get_all_images(client):
     response = client.get('/images')
     assert response.status_code == 200
     data = response.json["images"][0]
-    assert data["label"] == "cutepuppies"
+    assert data.get("label", "") == "cutepuppies"
     assert data['objects'][0] == 'dog'
 
     data = response.json["images"][2]

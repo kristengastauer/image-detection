@@ -6,14 +6,7 @@ from detective.model import UserImage, ImageObjects
 from detective.lib import imagga
 
 def get_all_images():
-    c = sqlite3.connect("user_images.db").cursor()
-    c.execute("SELECT id, image, label, enable_detection FROM IMAGES")
-    images = []
-    for row in c.fetchall():
-        item = UserImage(*row)
-        images.append(item.to_dict())
-    c.close()
-
+    images = UserImage.get_all()
     return images
 
 def get_image_by_id(id):
@@ -21,25 +14,29 @@ def get_image_by_id(id):
 
 def add_image(label, image, enable_detection, typ="file"):
     # convert image to binary
-    binary_img = image
+    # call to see objects detected
+    objects = []
     if typ == "url":
         binary_img = _convert_url_to_binary(image)
+        if enable_detection:
+            objects = imagga.get_tags_for_image_url(img_url=image)
+    else:
+        if (not isinstance(image, str) or not image.strip()):
+            return {'error': 'Invalid image file.'}
+        with open(image, 'rb') as file:
+            if enable_detection:
+                upload_id = imagga.upload_image_for_processing(file)
+                objects = imagga.get_tags_for_image_url(upload_id=upload_id)
+            binary_img = file.read()
 
     # add image to db
     img = UserImage(id=None,
-                    image=image,
+                    image=binary_img,
                     label=label,
                     enable_detection=enable_detection
                     )
     img.add_to_db()
-    # call to see objects detected
     if img.enable_detection:
-        if typ == "url":
-            objects = imagga.get_tags_for_image_url(img_url=image)
-        else:
-            upload_id = imagga.upload_image_for_processing(binary_img)
-            objects = imagga.get_tags_for_image_url(upload_id=upload_id)
-
         # add objs to db
         for obj in objects:
             img_obj = ImageObjects(id=None, image_id=img.id, object_name=obj)

@@ -26,6 +26,18 @@ class UserImage:
             "objects": objs
         }
     
+    @classmethod
+    def get_all(cls):
+        c = sqlite3.connect("user_images.db").cursor()
+        c.execute("SELECT id, image, label, enable_detection FROM IMAGES")
+        images = []
+        for row in c.fetchall():
+            item = UserImage(*row)
+            images.append(item.to_dict())
+        c.close()
+    
+        return images
+    
     def get_all_detected_objects(self):
         c = sqlite3.connect("user_images.db").cursor()
         c.execute("SELECT * FROM IMAGEOBJECTS WHERE image_id=?", (self.id,))

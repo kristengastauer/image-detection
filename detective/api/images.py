@@ -11,7 +11,9 @@ def create(config):
         objects = request.args.get("objects")
         # no query of objects, return them all
         if not objects:
-            return jsonify({"images": image_service.get_all_images()})
+            images = {"images": image_service.get_all_images()}
+            print(images, '$$$$$$$$$$$$$$$^^^^^^^^^^^^^')
+            return images
 
         # otherwise, call to get all images with object detection enabled that have object
         images = []
