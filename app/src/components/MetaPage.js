@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Input from './components/Input';
+import Input from './Input';
 import axios from "axios";
 
 function MetaPage({ props }) {
@@ -34,7 +34,7 @@ function MetaPage({ props }) {
                             Id: {imageResponse.id}, Label: {imageResponse.label}, Detection Enabled: {imageResponse.enable_detection}
                             Objects: {imageResponse.objects.map((obj, _) => (
                                 <span>
-                                    {obj}, 
+                                    {obj},
                                 </span>
                             ))}
                         </code>

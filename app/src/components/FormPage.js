@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from "axios";
-import Input from './components/Input';
-import RadioOutput from './components/RadioOutput';
-import './Form.css'
+import Input from './Input';
+import RadioOutput from './RadioOutput';
+import './styles/Form.css'
 
 function FormPage({ props }) {
     const options = [
@@ -85,7 +85,7 @@ function FormPage({ props }) {
                             {image.id},
                         </code>
                     ))}
-            </div>
+                </div>
             }
         </div>
     )

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from "./components/Header";
-import FormPage from "./FormPage";
-import MetaPage from "./MetaPage";
+import FormPage from "./components/FormPage";
+import MetaPage from "./components/MetaPage";
 
 
 function App() {
