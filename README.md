@@ -61,6 +61,7 @@ Response | Description
 ---------|------------
 200      | Json with all image data, label, DB ID, any objects detected (if enabled)
 400      | Bad image data provided
+422      | Imagga responded with an error
 
 Parameter            | Description
 ---------------------|-------------
