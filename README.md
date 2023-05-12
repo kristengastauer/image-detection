@@ -1,6 +1,7 @@
 # image-detection
 API that processes provided images for objects and returns the image(s) metadata
 
+For my app specifically, I only added objects with a 60% confidence or higher, but based on user specifications this could be adjusted.
 
 # API Specification
 
@@ -150,3 +151,4 @@ The UI right now is very simple
 - Because there are so many ways to utilize these endpoints, different pages and perhaps a menu would do well for overall user experience
 - Example: A Libary page would hit GET /images and display all image objects, then we could click into the image and get the list of objects detected (breadcrumbs would then be used)
 - For a more advanced iteration, using a drawing software to circle detected object, like Facebook does with tags.
+- Toast notifications for errors, and status components for loading
