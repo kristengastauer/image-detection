@@ -1,0 +1,12 @@
+.output-container {
+    background-color: #BEBEBE;
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    padding: 30px;
+    border-radius: 10px;
+  }
+  
+  .output-container input {
+    width: 50px;
+  }

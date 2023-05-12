@@ -1,6 +1,7 @@
 # image-detection
 API that processes provided images for objects and returns the image(s) metadata
 
+For my app specifically, I only added objects with a 60% confidence or higher, but based on user specifications this could be adjusted.
 
 # API Specification
 
@@ -61,6 +62,7 @@ Response | Description
 ---------|------------
 200      | Json with all image data, label, DB ID, any objects detected (if enabled)
 400      | Bad image data provided
+422      | Imagga responded with an error
 
 Parameter            | Description
 ---------------------|-------------
@@ -72,7 +74,7 @@ image_type           | (optional - defaults type is "file") should be either "fi
 Sample response
 ```
 {"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 1, "objects": ["dog"]}}
-{"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 0, "objects": None}}
+{"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 0}}
 ```
 
 # Image object detection: Imagga
@@ -105,6 +107,8 @@ To test the API directly, in a second terminal window you can now hit:
 curl -X GET http://localhost:3000/images
 
 curl -X POST http://localhost:3000/images -F "image=<url>" -F "image_type=url" -F "label=fluffy_dog" -F "enable_detection=False"
+
+curl -X GET "http://localhost:3000/images?objects=dog"
 ```
 
 
@@ -147,3 +151,4 @@ The UI right now is very simple
 - Because there are so many ways to utilize these endpoints, different pages and perhaps a menu would do well for overall user experience
 - Example: A Libary page would hit GET /images and display all image objects, then we could click into the image and get the list of objects detected (breadcrumbs would then be used)
 - For a more advanced iteration, using a drawing software to circle detected object, like Facebook does with tags.
+- Toast notifications for errors, and status components for loading

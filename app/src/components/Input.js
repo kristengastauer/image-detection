@@ -1,7 +1,7 @@
 import React from "react";
-import './Input.css';
+import './styles/Input.css';
 
-function Input( props) {
+function Input(props) {
   return (
     <div className="input-container">
         <label>{ props.label }</label>

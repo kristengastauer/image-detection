@@ -18,13 +18,16 @@ class UserImage:
         self.enable_detection = bool(enable_detection)  # bool
 
     def to_dict(self):
-        objs = self.get_all_detected_objects()
-        return {
+        formatted = {
             "id": self.id,
             "label": self.label,
             "enable_detection": self.enable_detection,
-            "objects": objs
         }
+        # enable detection isn't on, no need to spend time in the DB looking for them
+        if self.enable_detection:
+            formatted["objects"] = self.get_all_detected_objects()
+        
+        return formatted
     
     @classmethod
     def get_all(cls):
