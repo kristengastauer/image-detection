@@ -48,7 +48,9 @@ def create(config):
             return jsonify({"image": image})
 
         except ValueError as e:
-            return jsonify({'message': str(e)}), 400
+            return jsonify({'error': str(e)}), 400
+        except Exception as e:
+            return jsonify({'error': f"There was an issue connecting to Imagga: {str(e)}"}), 422
 
     def _not_found(message):
         response = jsonify({'error': message})

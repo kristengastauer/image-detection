@@ -1,5 +1,5 @@
 # image-detection
-API that processes provided images for objects and returns the image(s)
+API that processes provided images for objects and returns the image(s) metadata
 
 
 # API Specification
@@ -53,7 +53,7 @@ Sample response
 {"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 1, "objects": ["dog"]}}
 ```
 
-## Post an image and recieve it's metadata, the objects detected in it
+## Post an image and recieve its metadata, the objects detected in it
 ```
 POST /images
 ```
@@ -77,12 +77,13 @@ Sample response
 
 # Image object detection: Imagga
 
-https://docs.imagga.com/#tags
-https://docs.imagga.com/#uploads
-
+- https://docs.imagga.com/#tags
+- https://docs.imagga.com/#uploads
 
 
 # Local Setup
+
+You will need to set up a config.py file, similar to example.config.py for Imagga auth.
 
 ```
 sudo pip3 install virtualenv
@@ -101,9 +102,9 @@ npm start
 
 To test the API directly, in a second terminal window you can now hit:
 ```
-curl -X GET http://localhost:8080/images
+curl -X GET http://localhost:3000/images
 
-curl -X POST http://localhost:8080/images -F "image=<url>" -F "image_type=url" -F "label=fluffy_dog" -F "enable_detection=False"
+curl -X POST http://localhost:3000/images -F "image=<url>" -F "image_type=url" -F "label=fluffy_dog" -F "enable_detection=False"
 ```
 
 
@@ -117,7 +118,10 @@ Response | Description
 ---------|------------
 200      | List of all objects in images db
 
-If we had this endpoint, we could show options for the UI to show the user to filter on
+- If we had this endpoint, we could show options for the UI to show the user to filter on
+- This would require another database model for tracking the unique objects
+
+- Currently the DB stores binary version of the image, we could return the images to the user in the UI as well so they can see which images match the object query search (GET /images?objects="dog,cat)
 
 ### API Security
 
@@ -126,8 +130,7 @@ If we had this endpoint, we could show options for the UI to show the user to fi
 
 ### Query specifications
 
-- Allow for semi-match cases for object searches
-Example:
+- Allow for semi-match cases for object searches, for example:
 ```
 GET /images?objects="dog,cat"
 
@@ -137,3 +140,10 @@ GET /images?objects="dog,cat"
     ]
 }
 ```
+
+### The UI
+
+The UI right now is very simple
+- Because there are so many ways to utilize these endpoints, different pages and perhaps a menu would do well for overall user experience
+- Example: A Libary page would hit GET /images and display all image objects, then we could click into the image and get the list of objects detected (breadcrumbs would then be used)
+- For a more advanced iteration, using a drawing software to circle detected object, like Facebook does with tags.

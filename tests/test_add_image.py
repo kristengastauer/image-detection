@@ -92,10 +92,34 @@ def test_bad_upload_image(client, mocker):
     """
     Test the POST /images endpoint.
     """
-    # Test uploading an image file
+    # Test uploading a nonexistent local image file
     current_dir = os.path.dirname(os.path.abspath(__file__))
     image_path = os.path.join(current_dir, 'NOTAPIC.jpeg')
 
     response = client.post('/images', data={"label": "funpic", "image": image_path, "enable_detection": True, "image_type": "file"})
 
     assert response.status_code == 400
+
+    # Test uploading with an image URL that doesn't exist
+    url = "http://google.com/very_real_image.png"
+    mocked_url_response_object = requests.models.Response()
+    mocked_url_response_object.status_code = 404
+    mocker.patch.object(requests, "get", return_value=mocked_url_response_object)
+    requests.get(url)
+
+    response = client.post('/images', data={"label": "thispicexists", "image": image_path, "enable_detection": True, "image_type": "url"})
+
+    assert response.status_code == 422
+    assert response.json["error"] == "There was an issue connecting to Imagga: 404 Client Error: None for url: None"
+
+    # Test uploading with an image URL that is bad
+    url = "http://google.com/very_real_image.png"
+    mocked_url_response_object = requests.models.Response()
+    mocked_url_response_object.status_code = 500
+    mocker.patch.object(requests, "get", return_value=mocked_url_response_object)
+    requests.get(url)
+
+    response = client.post('/images', data={"label": "thispicexists", "image": image_path, "enable_detection": True, "image_type": "url"})
+
+    assert response.status_code == 422
+    assert response.json["error"] == "There was an issue connecting to Imagga: 500 Server Error: None for url: None"
