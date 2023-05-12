@@ -87,11 +87,15 @@ def test_upload_image(client, mocker):
     assert response.status_code == 200
     assert response.json["image"]["label"] == "superreal"
 
-# test uploading regular image file
 
-# test uploading bad data (should error)
+def test_bad_upload_image(client, mocker):
+    """
+    Test the POST /images endpoint.
+    """
+    # Test uploading an image file
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    image_path = os.path.join(current_dir, 'NOTAPIC.jpeg')
 
-# test uploading image no objects
+    response = client.post('/images', data={"label": "funpic", "image": image_path, "enable_detection": True, "image_type": "file"})
 
-# test uploading image with objects
-
+    assert response.status_code == 400

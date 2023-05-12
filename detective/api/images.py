@@ -1,5 +1,4 @@
-from flask import Blueprint, request, jsonify, abort
-import json
+from flask import Blueprint, request, jsonify
 import detective.service as image_service
 
 
@@ -43,10 +42,13 @@ def create(config):
         image = request.form.get("image")
         typ = request.form.get("image_type")
         enable_detection = _parse_boolean_value(request.form.get("enable_detection"))
-        print(label, image, typ, enable_detection, "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
 
-        image = image_service.add_image(label=label, image=image, enable_detection=enable_detection, typ=typ)
-        return jsonify({"image": image})
+        try:
+            image = image_service.add_image(label=label, image=image, enable_detection=enable_detection, typ=typ)
+            return jsonify({"image": image})
+
+        except ValueError as e:
+            return jsonify({'message': str(e)}), 400
 
     def _not_found(message):
         response = jsonify({'error': message})

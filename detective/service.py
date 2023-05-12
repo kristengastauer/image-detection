@@ -1,5 +1,3 @@
-import sqlite3
-import json
 import requests
 from flask import jsonify
 from detective.model import UserImage, ImageObjects
@@ -23,11 +21,14 @@ def add_image(label, image, enable_detection, typ="file"):
     else:
         if (not isinstance(image, str) or not image.strip()):
             return {'error': 'Invalid image file.'}
-        with open(image, 'rb') as file:
-            if enable_detection:
-                upload_id = imagga.upload_image_for_processing(file)
-                objects = imagga.get_tags_for_image_url(upload_id=upload_id)
-            binary_img = file.read()
+        try:
+            with open(image, 'rb') as file:
+                if enable_detection:
+                    upload_id = imagga.upload_image_for_processing(file)
+                    objects = imagga.get_tags_for_image_url(upload_id=upload_id)
+                binary_img = file.read()
+        except:
+            raise ValueError("Image file is unable to be opened")
 
     # add image to db
     img = UserImage(id=None,
