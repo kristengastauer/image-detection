@@ -73,7 +73,7 @@ image_type           | (optional - defaults type is "file") should be either "fi
 Sample response
 ```
 {"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 1, "objects": ["dog"]}}
-{"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 0, "objects": None}}
+{"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 0}}
 ```
 
 # Image object detection: Imagga
@@ -106,6 +106,8 @@ To test the API directly, in a second terminal window you can now hit:
 curl -X GET http://localhost:3000/images
 
 curl -X POST http://localhost:3000/images -F "image=<url>" -F "image_type=url" -F "label=fluffy_dog" -F "enable_detection=False"
+
+curl -X GET "http://localhost:3000/images?objects=dog"
 ```
 
 
