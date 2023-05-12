@@ -12,7 +12,6 @@ def create(config):
         # no query of objects, return them all
         if not objects:
             images = {"images": image_service.get_all_images()}
-            print(images, '$$$$$$$$$$$$$$$^^^^^^^^^^^^^')
             return images
 
         # otherwise, call to get all images with object detection enabled that have object
@@ -44,6 +43,7 @@ def create(config):
         image = request.form.get("image")
         typ = request.form.get("image_type")
         enable_detection = _parse_boolean_value(request.form.get("enable_detection"))
+        print(label, image, typ, enable_detection, "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
 
         image = image_service.add_image(label=label, image=image, enable_detection=enable_detection, typ=typ)
         return jsonify({"image": image})

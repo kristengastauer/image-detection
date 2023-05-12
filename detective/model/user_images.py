@@ -32,7 +32,7 @@ class UserImage:
         c.execute("SELECT id, image, label, enable_detection FROM IMAGES")
         images = []
         for row in c.fetchall():
-            item = UserImage(*row)
+            item = cls(*row)
             images.append(item.to_dict())
         c.close()
     
