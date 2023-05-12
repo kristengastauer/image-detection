@@ -17,7 +17,10 @@ def add_image(label, image, enable_detection, typ="file"):
     if typ == "url":
         binary_img = _convert_url_to_binary(image)
         if enable_detection:
-            objects = imagga.get_tags_for_image_url(img_url=image)
+            try:
+                objects = imagga.get_tags_for_image_url(img_url=image)
+            except Exception:
+                raise 
     else:
         if (not isinstance(image, str) or not image.strip()):
             return {'error': 'Invalid image file.'}
@@ -27,8 +30,10 @@ def add_image(label, image, enable_detection, typ="file"):
                     upload_id = imagga.upload_image_for_processing(file)
                     objects = imagga.get_tags_for_image_url(upload_id=upload_id)
                 binary_img = file.read()
-        except:
+        except FileNotFoundError:
             raise ValueError("Image file is unable to be opened")
+        except Exception as e:
+            raise
 
     # add image to db
     img = UserImage(id=None,
