@@ -75,28 +75,6 @@ Sample response
 {"image": {"id": 12345678654323456, "label": "superreal", "enable_detection": 0, "objects": None}}
 ```
 
-# Extra API Endpoints For UI
-
-```
-GET /images/<object_name>
-```
-Response | Description
----------|------------
-200      | Json with all images metadata that contain specified object
-404      | Image with object_name not found
-
-Parameter   | Description
-------------|-------------
-object_name  | path parameter name of object
-
-```
-GET /images/objects
-```
-Response | Description
----------|------------
-200      | List of all objects in images db
-
-
 # Image object detection: Imagga
 
 https://docs.imagga.com/#tags
@@ -115,6 +93,12 @@ pip install -r requirements.txt
 python3 dev.py
 ```
 
+To run the UI (since these are on the same port, you must run UI before dev.py):
+```
+cd app
+npm start
+```
+
 To test the API directly, in a second terminal window you can now hit:
 ```
 curl -X GET http://localhost:8080/images
@@ -122,3 +106,34 @@ curl -X GET http://localhost:8080/images
 curl -X POST http://localhost:8080/images -F "image=<url>" -F "image_type=url" -F "label=fluffy_dog" -F "enable_detection=False"
 ```
 
+
+# Future Iterations and development
+
+### Extra API Endpoints For UI
+```
+GET /images/objects
+```
+Response | Description
+---------|------------
+200      | List of all objects in images db
+
+If we had this endpoint, we could show options for the UI to show the user to filter on
+
+### API Security
+
+- Ensure users are authorized to use the API
+- Ensure that users are accessing their own images uploaded, and not others
+
+### Query specifications
+
+- Allow for semi-match cases for object searches
+Example:
+```
+GET /images?objects="dog,cat"
+
+{"images": [
+        {"id": 12345678654323456, "label": "cockapooAndyorkie", "enable_detection": 1, "objects": ["fluffy dog", "dogs"]},
+        {"id": 12345678654323456, "label": "lion", "enable_detection": 1, "objects": ["jungle cat"]}
+    ]
+}
+```

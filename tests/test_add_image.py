@@ -62,7 +62,7 @@ def test_upload_image(client, mocker):
     mocker.patch.object(requests, "get", return_value=mocked_tag_response_object)
     requests.get("https://api.imagga.com/v2/tags", data={"upload_id": "i05e132196706b94b1d85efb5f3SaM1j"})
 
-    response = client.post('/images', data={"label": "funpic", "image": file_data, "enable_detection": True, "image_type": "file"})
+    response = client.post('/images', data={"label": "funpic", "image": image_path, "enable_detection": True, "image_type": "file"})
 
     assert response.status_code == 200
     data = response.json
@@ -87,11 +87,15 @@ def test_upload_image(client, mocker):
     assert response.status_code == 200
     assert response.json["image"]["label"] == "superreal"
 
-# test uploading regular image file
 
-# test uploading bad data (should error)
+def test_bad_upload_image(client, mocker):
+    """
+    Test the POST /images endpoint.
+    """
+    # Test uploading an image file
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    image_path = os.path.join(current_dir, 'NOTAPIC.jpeg')
 
-# test uploading image no objects
+    response = client.post('/images', data={"label": "funpic", "image": image_path, "enable_detection": True, "image_type": "file"})
 
-# test uploading image with objects
-
+    assert response.status_code == 400
