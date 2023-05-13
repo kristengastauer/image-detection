@@ -13,6 +13,7 @@ function FormPage({ props }) {
     const [imageURL, setInputValue] = useState("");
     const [labelValue, setLabelValue] = useState("");
     const [imagesResponse, setImagesResponse] = useState([]);
+    const [imageLoading, setImageLoading] = useState(false);
     const [objectResponse, setObjectResponse] = useState("");
     const [imageType, setImageType] = useState(options[0].value);
     const [selectedObject, setSelectedObject] = useState("");
@@ -26,6 +27,7 @@ function FormPage({ props }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setImageLoading(true);
         const imgData = new FormData();
         imgData.append("image", imageURL);
         imgData.append("image_type", imageType);
@@ -33,9 +35,12 @@ function FormPage({ props }) {
         imgData.append("enable_detection", true);
         axios.post("/images", imgData)
             .then((response) => {
-                setImagesResponse(response.data.image.objects);
+                const imageObjs = response.data.image.objects
+                setImageLoading(false);
+                setImagesResponse(imageObjs ? imageObjs : []);
             })
             .catch((error) => {
+                setImageLoading(false);
                 console.log(error);
             });
     };
@@ -61,30 +66,30 @@ function FormPage({ props }) {
                 <Input text={labelValue} onChange={handleLabelChange} placeholder="myImage" label="Image Name:" />
                 <select value={imageType} onChange={(e) => setImageType(e.target.value)}>
                     {options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                        {option.label}
-                    </option>
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
                     ))}
                 </select>
                 <div><button type="submit">Detect Objects</button></div>
                 </div>
             </form>
             </div>
-            {imagesResponse.length ? (
-                <RadioOutput 
-                    header={`Objects detected in Image ${labelValue}:`}
-                    text="Select an object to see other images that contain it"
-                    objects={imagesResponse}
-                    selectedObject={selectedObject}
-                    handleClick={handleClick} />
-            ) : ""}
+            <RadioOutput 
+                loading={imageLoading}
+                header={`Objects detected in Image ${labelValue}:`}
+                text="Select an object to see other images that contain it"
+                objects={imagesResponse}
+                selectedObject={selectedObject}
+                handleClick={handleClick} />
             {objectResponse &&
                 <div className="output-container">
-                    {objectResponse.map((image, _) => (
-                        <code>
-                            {image.id},
-                        </code>
-                    ))}
+                    <code>
+                        {objectResponse.map((image, index) => (
+                            index !== objectResponse.length - 1 ? 
+                                image.id + "," : image.id
+                        ))}
+                    </code>
                 </div>
             }
         </div>

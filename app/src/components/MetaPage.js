@@ -31,12 +31,10 @@ function MetaPage({ props }) {
                 imageResponse && (
                     <div className="output-container">
                         <code>
-                            Id: {imageResponse.id}, Label: {imageResponse.label}, Detection Enabled: {imageResponse.enable_detection}
-                            Objects: {imageResponse.objects.map((obj, _) => (
-                                <span>
-                                    {obj},
-                                </span>
-                            ))}
+                            Id: {imageResponse.id}, Label: {imageResponse.label}, Detection Enabled: {imageResponse.enable_detection ? "True": "False"},
+                            Objects: {
+                                imageResponse.objects.map((obj, index) => (index !== imageResponse.objects.length - 1 ? obj + ", " : obj))
+                            }
                         </code>
                     </div>
                 )
