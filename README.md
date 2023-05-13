@@ -1,7 +1,7 @@
 # image-detection
 API that processes provided images for objects and returns the image(s) metadata
-
-For my app specifically, I only added objects with a 60% confidence or higher, but based on user specifications this could be adjusted.
+For my app specifically, I only added objects with a 60% confidence or higher, but this could be adjusted for user requirements
+The API is in Python, the UI uses a React framework with Javascript
 
 # API Specification
 
@@ -111,6 +111,10 @@ curl -X POST http://localhost:3000/images -F "image=<url>" -F "image_type=url" -
 curl -X GET "http://localhost:3000/images?objects=dog"
 ```
 
+Tests use Pytest, to run:
+```
+pytest ./tests -vv
+```
 
 # Future Iterations and development
 
@@ -131,6 +135,7 @@ Response | Description
 
 - Ensure users are authorized to use the API
 - Ensure that users are accessing their own images uploaded, and not others
+- Not too familiar with SQL injection, would love to research and ensure none is occuring in my API
 
 ### Query specifications
 
@@ -148,7 +153,8 @@ GET /images?objects="dog,cat"
 ### The UI
 
 The UI right now is very simple
-- Because there are so many ways to utilize these endpoints, different pages and perhaps a menu would do well for overall user experience
-- Example: A Libary page would hit GET /images and display all image objects, then we could click into the image and get the list of objects detected (breadcrumbs would then be used)
-- For a more advanced iteration, using a drawing software to circle detected object, like Facebook does with tags.
-- Toast notifications for errors, and status components for loading
+- Cleanup UI in a way that would make this tool useful
+- Example: The Libary page would hit GET /images and render the actual images, then use a drawing software to circle detected object, like Facebook does with tagging friends
+- Toast notifications for error-handling
+- Modals, rather than tabs
+- If we had a list of all objects available, a filtering tool
