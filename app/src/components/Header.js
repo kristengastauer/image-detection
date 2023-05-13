@@ -15,6 +15,9 @@ function Header(props) {
                     <li onClick={() => setSelectedPage("meta")}>
                         <span style={{ color: selectedPage === "meta" ? 'white' : "#BEBEBE" }}>View Meta</span>
                     </li>
+                    <li onClick={() => setSelectedPage("library")}>
+                        <span style={{ color: selectedPage === "library" ? 'white' : "#BEBEBE" }}>Library</span>
+                    </li>
                 </ul>
             </nav>
         </div>
